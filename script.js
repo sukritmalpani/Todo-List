@@ -3,10 +3,15 @@ let projectCreate = document.getElementById('project-create');
 let todoCreate = document.getElementById('create');
 let container = document.querySelector('.display');
 let projects = [];
+let projectContainer;
 let todos = [];
 let currentProject;
 let currentTodo;
 let f;
+// clear();
+displayProjects();
+// render();
+display();
 function Projects(name) {
     this.name = name;
 }
@@ -36,6 +41,7 @@ projectCreate.addEventListener('click', () => {
         alert("Project Name cannot be empty");
     // console.log(projectName);
     else if (f == 0) {
+        clear();
         createProject(projectName);
     }
 });
@@ -52,11 +58,11 @@ todoCreate.addEventListener('click', () => {
     else
         createTodo(title, description, dueDate, priority, currentProject);
 });
-function createProject(projectName, currentTodo) {
+function createProject(projectName) {
     let project = new Projects(projectName, currentTodo);
     projects.push(project);
     let container = document.querySelector('.projects');
-    let projectContainer = document.createElement('div');
+    projectContainer = document.createElement('div');
     projectContainer.classList.add('project-container');
     let name = document.createElement('p');
     name.classList.add('project-title');
@@ -65,27 +71,63 @@ function createProject(projectName, currentTodo) {
     projectContainer.appendChild(name);
     currentProject = projectName;
     clear();
-    render();
+    // render();
     display(currentProject);
+    localStorage.setItem("projects", JSON.stringify(projects));
+    // clear();
     projectContainer.addEventListener('click', () => {
         console.log(projectName);
         currentProject = projectName;
         clear();
         render();
         display(currentProject);
-    })
+    });
 }
 function createTodo(titleText, descriptionText, dueDateText, priorityText, currentProject) {
     let todo = new Todos(titleText, descriptionText, dueDateText, priorityText, currentProject, false);
     todos.push(todo);
-    clear();
-    render();
-    display(currentProject);
-    // todoContainer.addEventListener('click', () => {
-    //     console.log(projectName);
-    // })
+    // clear();
+    // render();
+    let todoContainer = document.createElement('div');
+    todoContainer.classList.add('todo-container');
+    let check = document.createElement('input');
+    check.setAttribute('type', 'checkbox');
+    check.classList.add('check');
+    let title = document.createElement('p');
+    let description = document.createElement('p');
+    let dueDate = document.createElement('p');
+    let priority = document.createElement('div');
+    if (todo.priority == "Normal")
+        priority.classList.add('normal');
+    else
+        priority.classList.add('urgent');
+    title.classList.add('todo-title');
+    title.textContent = todo.title;
+    description.classList.add('todo-title');
+    description.textContent = todo.description;
+    dueDate.classList.add('todo-title');
+    dueDate.textContent = todo.dueDate;
+    priority.classList.add('todo-title');
+    priority.textContent = todo.priority;
+    container.appendChild(todoContainer);
+    todoContainer.appendChild(check);
+    todoContainer.appendChild(title);
+    todoContainer.appendChild(description);
+    todoContainer.appendChild(dueDate);
+    todoContainer.appendChild(priority);
+    if (todo.checked == true) {
+        todoContainer.style.textDecoration = "line-through";
+        check.checked = true;
+        todoContainer.style.opacity = '0.5';
+    }
+    else {
+        todoContainer.style.textDecoration = "none";
+        todoContainer.style.opacity = '1';
+    }
+    localStorage.setItem("todos", JSON.stringify(todos));
 }
 function render() {
+    // clear();
     let todoContainer = document.createElement('div');
     todoContainer.classList.add('todo-container');
     let title = document.createElement('h1');
@@ -106,7 +148,34 @@ function render() {
     todoContainer.appendChild(dueDate);
     todoContainer.appendChild(priority);
 }
+function displayProjects(projectName) {
+    projects = JSON.parse(localStorage.getItem("projects") || "[]");
+    clear();
+    for (let i in projects) {
+        console.log(projects[i].name);
+        let container = document.querySelector('.projects');
+        projectContainer = document.createElement('div');
+        projectContainer.classList.add('project-container');
+        let name = document.createElement('p');
+        name.classList.add('project-title');
+        name.textContent = projects[i].name;
+        container.appendChild(projectContainer);
+        projectContainer.appendChild(name);
+        currentProject = projectName;
+        clear();
+        // render();
+        projectContainer.addEventListener('click', () => {
+            console.log(projects[i].name);
+            currentProject = projects[i].name;
+            clear();
+            render();
+            display(currentProject);
+        });
+    }
+}
 function display() {
+    // todos = JSON.parse(localStorage.getItem("todos") || "[]");
+    // clear();
     for (let i in todos) {
         // for (let j in todos[i])
         console.log(todos[i].project);
@@ -138,6 +207,7 @@ function display() {
             todoContainer.appendChild(description);
             todoContainer.appendChild(dueDate);
             todoContainer.appendChild(priority);
+            console.log(todos[i].checked);
             if (todos[i].checked == true) {
                 todoContainer.style.textDecoration = "line-through";
                 check.checked = true;
