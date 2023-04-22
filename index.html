@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container">
+        <div class="projects">
+            <h2>Projects</h1>
+                <div class="project-name">
+                    <input type="text" placeholder="Project" id="p-name">
+                    <img src="/images/plus-solid.svg" id="project-create" alt="">
+                </div>
+        </div>
+        <div>
+            <form action="">
+              <div>
+                <label for="title">Enter title: </label>
+                <input type="text" id="title" required/>
+              </div>
+              <div>
+                <label for="description">Enter description: </label>
+                <textarea id="description" id="description" maxlength="100" minlength="10"></textarea>
+              </div>
+              <div>
+                <label for="dueDate">Enter due Date: </label>
+                <input type="date" id="dueDate"required/>
+              </div>
+              <div>
+                <label for="priority">Set the priority: </label>
+                <select id="priority" required>
+                  <option value="Normal">Normal</option>
+                  <option value="Urgent">Urgent</option>
+                </select>
+              </div>
+              <div><button type="button" id="create">Create</button></div>
+            </form>
+            <div class="display"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
